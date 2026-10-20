@@ -1,0 +1,41 @@
+#!/bin/zsh
+# liddown — keep this MacBook awake with the lid closed, but only on mains power.
+#   liddown status   show the current state (no sudo)
+#   liddown on       sudo: allow the guard to disable sleep whenever on AC
+#   liddown off      sudo: restore normal sleep and tell the guard to stand down
+#
+# NOTE: `pmset disablesleep` is SYSTEM-WIDE. macOS stores it under
+# SystemPowerSettings, not per power source, so `pmset -c` does not make it
+# AC-only. The AC-only behaviour comes from the guard (liddown-guard.sh, a root
+# LaunchDaemon installed by install-guard.sh) which flips the setting every
+# minute to match the power source: 1 on AC, 0 on battery (and sleeps at once if
+# the lid is already closed). Without the guard installed, `on` means the Mac
+# never sleeps on battery either.
+set -e
+PLIST=/Library/Preferences/com.apple.PowerManagement.plist
+FLAG=/usr/local/etc/liddown.disabled       # present => guard keeps sleep enabled
+DAEMON=com.rstuklis.liddown
+case "${1:-status}" in
+  status)
+    src=$(pmset -g batt | sed -n "s/.*'\(.*\)'.*/\1/p")
+    now=$(pmset -g | awk '/SleepDisabled/{print $2}'); now=${now:-0}
+    saved=$(/usr/libexec/PlistBuddy -c 'Print :SystemPowerSettings:SleepDisabled' "$PLIST" 2>/dev/null || echo false)
+    lid=$(ioreg -r -k AppleClamshellState -d 4 2>/dev/null | awk -F'= ' '/AppleClamshellState/{print ($2=="Yes")?"closed":"open"; exit}')
+    if launchctl print "system/$DAEMON" >/dev/null 2>&1; then guard=installed; else guard="NOT installed (run: sudo ./install-guard.sh)"; fi
+    [[ -e $FLAG ]] && mode="off (stand-down flag present)" || mode="on"
+    echo "power source   : $src   lid: ${lid:-unknown}"
+    echo "SleepDisabled  : $now (saved: $saved)   [system-wide setting]"
+    echo "guard daemon   : $guard   liddown mode: $mode"
+    if [[ $now == 1 ]]; then echo "=> lid closed now: stays awake, jobs run"; else echo "=> lid closed now: sleeps"; fi
+    ;;
+  on)
+    sudo rm -f "$FLAG"
+    src=$(pmset -g batt | sed -n "s/.*'\(.*\)'.*/\1/p")
+    if [[ $src == "AC Power" ]]; then sudo pmset -a disablesleep 1; else echo "on battery: leaving sleep enabled; the guard will disable it when you plug in"; fi
+    "$0" status ;;
+  off)
+    sudo mkdir -p "$(dirname "$FLAG")" && sudo touch "$FLAG"
+    sudo pmset -a disablesleep 0
+    "$0" status ;;
+  *)   sed -n '2,13p' "$0"; exit 2 ;;
+esac

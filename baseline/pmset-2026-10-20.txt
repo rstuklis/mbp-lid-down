@@ -1,0 +1,143 @@
+date: illegal time format
+usage: date [-jnRu] [-I[date|hours|minutes|seconds|ns]] [-f input_fmt]
+            [ -z output_zone ] [-r filename|seconds] [-v[+|-]val[y|m|w|d|H|M|S]]
+            [[[[mm]dd]HH]MM[[cc]yy][.SS] | new_date] [+output_fmt]
+# captured 2026-10-20  on MacBookPro16,1, macOS 26.7.1
+
+## pmset -g
+System-wide power settings:
+Currently in use:
+ lidwake              1
+ lowpowermode         0
+ standbydelayhigh     86400
+ proximitywake        1
+ standby              1
+ standbydelaylow      10800
+ ttyskeepawake        1
+ hibernatemode        3
+ powernap             1
+ gpuswitch            2
+ hibernatefile        /var/vm/sleepimage
+ highstandbythreshold 50
+ displaysleep         120
+ womp                 1
+ networkoversleep     0
+ sleep                58 (sleep prevented by sharingd, caffeinate)
+ tcpkeepalive         1
+ halfdim              1
+ acwake               0
+ disksleep            0
+
+## pmset -g custom
+Battery Power:
+ lidwake              1
+ lowpowermode         0
+ standbydelayhigh     86400
+ standbydelaylow      10800
+ standby              1
+ proximitywake        0
+ ttyskeepawake        1
+ highstandbythreshold 50
+ gpuswitch            2
+ powernap             1
+ hibernatefile        /var/vm/sleepimage
+ hibernatemode        3
+ displaysleep         15
+ womp                 0
+ networkoversleep     0
+ sleep                60
+ tcpkeepalive         1
+ halfdim              1
+ acwake               0
+ lessbright           1
+ disksleep            10
+AC Power:
+ lidwake              1
+ lowpowermode         0
+ standbydelayhigh     86400
+ proximitywake        1
+ standby              1
+ standbydelaylow      10800
+ ttyskeepawake        1
+ hibernatemode        3
+ powernap             1
+ gpuswitch            2
+ hibernatefile        /var/vm/sleepimage
+ highstandbythreshold 50
+ displaysleep         120
+ womp                 1
+ networkoversleep     0
+ sleep                58
+ tcpkeepalive         1
+ halfdim              1
+ acwake               0
+ disksleep            0
+
+## pmset -g assertions
+2026-10-20 11:01:29 +1030 
+Assertion status system-wide:
+   BackgroundTask                 0
+   ApplePushServiceTask           0
+   UserIsActive                   1
+   PreventUserIdleDisplaySleep    0
+   SoftwareUpdateTask             0
+   PreventSystemSleep             0
+   ExternalMedia                  1
+   PreventUserIdleSystemSleep     1
+   NetworkClientActive            0
+Listed by owning process:
+   pid 499(sharingd): [0x0000068e00018d7a] 00:01:24 PreventUserIdleSystemSleep named: "Handoff"  
+   pid 131(powerd): [0x0000000c0008804b] 00:29:09 ExternalMedia named: "com.apple.powermanagement.externalmediamounted"  
+   pid 2549(caffeinate): [0x000006bb00018d9a] 00:00:39 PreventUserIdleSystemSleep named: "caffeinate command-line tool"  
+	Details: caffeinate asserting for 300 secs
+	Localized=THE CAFFEINATE TOOL IS PREVENTING SLEEP.
+	Timeout will fire in 261 secs Action=TimeoutActionRelease
+   pid 243(WindowServer): [0x00000013000980d4] 00:00:55 UserIsActive named: "com.apple.iohideventsystem.queue.tickle serviceID:100000807 service:AppleMultitouchDevice product:Apple Internal Keyboard / Trackpad eventType:11"  
+	Timeout will fire in 7145 secs Action=TimeoutActionRelease
+Kernel Assertions: 0x104=USB,MAGICWAKE
+   id=507  level=255 0x4=USB creat= description=com.apple.usb.externaldevice.01200000 owner=Voyager GTX
+   id=508  level=255 0x100=MAGICWAKE creat= description=en0 owner=IOSkywalkNetworkBSDClient
+Idle sleep preventers: IODisplayWrangler
+
+## pmset -g batt
+Now drawing from 'AC Power'
+ -InternalBattery-0 (id=8585315)	79%; AC attached; not charging present: true
+
+## displays
+Graphics/Displays:
+
+    Intel UHD Graphics 630:
+
+      Chipset Model: Intel UHD Graphics 630
+--
+      Displays:
+        Color LCD:
+          Display Type: Built-In Retina LCD
+          Resolution: 3072 x 1920 Retina
+          Framebuffer Depth: 24-Bit Color (ARGB8888)
+
+## sharing (remote login / ssh)
+You need administrator access to run this tool... exiting!
+sshd not loaded
+
+## last 20 sleep/wake events
+2026-10-20 10:37:07 +1030 Assertions          	PID 499(sharingd) Released PreventUserIdleSystemSleep "Handoff" 00:03:59  id:0x0x1000085c9 [System: PrevIdle DeclUser kDisp]          
+2026-10-20 10:38:16 +1030 Assertions          	PID 262(PowerUIAgent) Created MaintenanceWake "com.apple.obc" 00:00:00  id:0x0xd00008c4b [System: PrevIdle DeclUser SRPrevSleep kCPU kDisp]          
+2026-10-20 10:38:16 +1030 Assertions          	PID 262(PowerUIAgent) Released MaintenanceWake "com.apple.obc" 00:00:00  id:0x0xd00008c4b [System: PrevIdle DeclUser kDisp]          
+2026-10-20 10:40:07 +1030 Assertions          	PID 1120(installer) Released PreventUserIdleSystemSleep "Installing Software (com.apple.installframework.Queue)" 00:01:47  id:0x0x100008c4c [System: PrevIdle DeclUser kDisp]          
+2026-10-20 10:43:08 +1030 Assertions          	PID 499(sharingd) Released PreventUserIdleSystemSleep "Handoff" 00:05:52  id:0x0x100008bfe [System: DeclUser kDisp]          
+2026-10-20 10:44:16 +1030 Assertions          	PID 262(PowerUIAgent) Created MaintenanceWake "com.apple.obc" 00:00:00  id:0x0xd00008cb9 [System: DeclUser SRPrevSleep kCPU kDisp]          
+2026-10-20 10:44:16 +1030 Assertions          	PID 262(PowerUIAgent) Released MaintenanceWake "com.apple.obc" 00:00:00  id:0x0xd00008cb9 [System: DeclUser kDisp]          
+2026-10-20 10:45:16 +1030 Assertions          	PID 262(PowerUIAgent) Created MaintenanceWake "com.apple.obc" 00:00:00  id:0x0xd00008cc9 [System: PrevIdle DeclUser SysAct SRPrevSleep kCPU kDisp]          
+2026-10-20 10:45:16 +1030 Assertions          	PID 262(PowerUIAgent) Released MaintenanceWake "com.apple.obc" 00:00:00  id:0x0xd00008cc9 [System: PrevIdle DeclUser SysAct kDisp]          
+2026-10-20 10:48:18 +1030 Assertions          	PID 308(backupd) Released PreventUserIdleSystemSleep "Backup Job" 00:03:16  id:0x0x100008cc4 [System: PrevIdle DeclUser kDisp]          
+2026-10-20 10:49:35 +1030 Assertions          	PID 499(sharingd) Released PreventUserIdleSystemSleep "Handoff" 00:04:55  id:0x0x100008cbb [System: DeclUser kDisp]          
+2026-10-20 10:58:51 +1030 Assertions          	PID 262(PowerUIAgent) Created MaintenanceWake "com.apple.obc" 00:00:00  id:0x0xd00008d5a [System: PrevIdle DeclUser SRPrevSleep kCPU kDisp]          
+2026-10-20 10:58:51 +1030 Assertions          	PID 262(PowerUIAgent) Released MaintenanceWake "com.apple.obc" 00:00:00  id:0x0xd00008d5a [System: PrevIdle DeclUser kDisp]          
+2026-10-20 11:00:50 +1030 Assertions          	PID 2174(caffeinate) ClientDied PreventUserIdleSystemSleep "caffeinate command-line tool" 00:03:59  id:0x0x100008d48 [System: PrevIdle DeclUser kDisp]          
+Total Sleep/Wakes since boot at 2026-10-20 10:32:13 +1030 :0
+   PreventUserIdleDisplaySleep    0
+   PreventSystemSleep             0
+   PreventUserIdleSystemSleep     1
+   pid 499(sharingd): [0x0000068e00018d7a] 00:01:26 PreventUserIdleSystemSleep named: "Handoff"  
+   pid 2549(caffeinate): [0x000006bb00018d9a] 00:00:41 PreventUserIdleSystemSleep named: "caffeinate command-line tool"  
